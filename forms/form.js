@@ -1,36 +1,30 @@
-const form = document.getElementById('contact-form');
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const loading = document.getElementById('form-loading');
-    const error = document.getElementById('form-error');
-    const sent = document.getElementById('form-sent');
-    const btn = document.getElementById('submit-btn');
+// First, include this in your HTML <head>: 
+// <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-    loading.style.display = 'block';
-    error.style.display = 'none';
-    sent.style.display = 'none';
+(function() {
+    // This connects the script to your account
+    emailjs.init("YOUR_PUBLIC_KEY"); 
+})();
 
-    const data = new FormData(form);
-    
-    fetch(form.action, {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    }).then(response => {
-      loading.style.display = 'none';
-      if (response.ok) {
-        sent.style.display = 'block';
-        form.reset();
-      } else {
-        // This will tell us exactly what Formspree is complaining about
-        response.json().then(data => {
-          error.innerHTML = "Error: " + data.error;
-          error.style.display = 'block';
+const contactForm = document.getElementById('contact-form');
+
+contactForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // These parameters match the variables in your EmailJS template
+    const templateParams = {
+        from_name: document.getElementById('user_name').value,
+        user_email: "estherossua@gmail.com", // Your destination email
+        reply_to: document.getElementById('user_email').value,
+        message: document.getElementById('message').value
+    };
+
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+        .then(function(response) {
+           alert('SUCCESS! Message sent to Esther.');
+           contactForm.reset();
+        }, function(error) {
+           alert('FAILED... check console for error');
+           console.log('FAILED...', error);
         });
-      }
-    }).catch(err => {
-      loading.style.display = 'none';
-      error.innerHTML = "Network Error. Please upload to a live server to test.";
-      error.style.display = 'block';
-    });
-  });
+});
