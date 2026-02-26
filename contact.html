@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Contact - Esther Ossua</title>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body class="contact-page">
+
+  <header id="header" class="header d-flex align-items-center light-background sticky-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <h1 class="sitename">Ossua Esther</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="resume.html">Resume</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <section id="contact" class="contact section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Contact</h2>
+        <p>I'd love to hear from you!</p>
+      </div>
+
+      <div class="container" data-aos="fade-up">
+        <div class="row gy-4">
+          <div class="col-lg-5">
+            <div class="info-wrap">
+              <div class="info-item d-flex">
+                <i class="bi bi-geo-alt flex-shrink-0"></i>
+                <div><h3>Address</h3><p>No 2 Ndubisi Ejimkonye, Delta State, Nigeria</p></div>
+              </div>
+              <div class="info-item d-flex">
+                <i class="bi bi-telephone flex-shrink-0"></i>
+                <div><h3>Call Me</h3><p>+234 902 526 1149</p></div>
+              </div>
+              <div class="info-item d-flex">
+                <i class="bi bi-envelope flex-shrink-0"></i>
+                <div><h3>Email Me</h3><p>ossuaesther@gmail.com</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <form action="https://formspree.io/f/ossuaesther@gmail.com" method="POST" id="contact-form" class="php-email-form">
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6">
+                  <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                </div>
+                <div class="col-md-12">
+                  <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+                </div>
+                <div class="col-md-12">
+                  <textarea class="form-control" name="message" rows="10" placeholder="Message" required></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div id="form-loading" style="display: none; color: #0563bb; margin-bottom: 15px;">Sending message...</div>
+                  <div id="form-error" style="display: none; color: #d9534f; margin-bottom: 15px; font-weight: bold;"></div>
+                  <div id="form-sent" style="display: none; color: #5cb85c; margin-bottom: 15px; font-weight: bold;">Your message has been sent. Thank you!</div>
+                  
+                  <button type="submit" id="submit-btn" style="background: #0563bb; color: #fff; border: 0; padding: 10px 35px; border-radius: 50px;">Send Message</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script>AOS.init();</script>
+
+  <script>
+    const form = document.getElementById('contact-form');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const loading = document.getElementById('form-loading');
+      const error = document.getElementById('form-error');
+      const sent = document.getElementById('form-sent');
+      const btn = document.getElementById('submit-btn');
+
+      // Reset display
+      loading.style.display = 'block';
+      error.style.display = 'none';
+      sent.style.display = 'none';
+      btn.disabled = true;
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(response => {
+        loading.style.display = 'none';
+        if (response.ok) {
+          sent.style.display = 'block';
+          form.reset();
+          btn.disabled = false;
+        } else {
+          response.json().then(data => {
+            if (Object.hasOwn(data, 'errors')) {
+              error.innerHTML = data["errors"].map(err => err["message"]).join(", ");
+            } else {
+              error.innerHTML = "Oops! Formspree encountered an error. Please check your email setup.";
+            }
+            error.style.display = 'block';
+            btn.disabled = false;
+          });
+        }
+      }).catch(() => {
+        loading.style.display = 'none';
+        error.innerHTML = "Network Error: Please ensure you are testing this on a live server (not just a local file).";
+        error.style.display = 'block';
+        btn.disabled = false;
+      });
+    });
+  </script>
+
+</body>
+</html>
